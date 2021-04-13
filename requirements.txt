@@ -1,0 +1,8 @@
+Flask
+WTForms
+flask-wtf
+Pillow
+numpy
+requests
+Flask-Images
+opencv-python
