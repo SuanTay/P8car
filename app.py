@@ -82,8 +82,9 @@ def deserialize_image(data_serialized):
     memfile = io.BytesIO()
     memfile.write(json.loads(data_serialized)['data'].encode('latin-1'))
     memfile.seek(0)
-
     img = np.load(memfile)
+    print('deserialize_image shape', img.shape)
+
     image = Image.fromarray(img)
     return(image)
 
