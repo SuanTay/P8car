@@ -24,16 +24,19 @@ def comput(i):
     path = f'{image_dir}/{image_list[i]}'
     print('Image path ',path)
     name = f'{image_list[i]}'
+    print('name img ',name)
     #copie l'image dans le dossier static
     imgR = Image.open(path)
     imgR.save(name)
     # image segmentation map
     imgC = myapi(imgR)
     name_c=f'c_{name}'
+    print('name color ', name_c)
     imgC.save(name_c)
     #merge
     imgT = merge(imgC, imgR)
     name_t=f't_{name}'
+    print('name total ', name_t)
     imgT.save(name_t)
     print('Image path original', name)
     print('Image path col', name_c)
@@ -48,8 +51,10 @@ def merge(imgPred, img):
     return imgs
 
 def myapi(data):
-    uri = os.getenv('uri')
+    uri = os.getenv('endpoint')
+    print('get endpoint OK')
     key = os.getenv('key')
+    print('get key OK')
     input_data = serialize_image(data)
     headers = {'Content-Type': 'application/json'}
     headers['Authorization'] = f'Bearer {key}'
