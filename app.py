@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'thisissecret'
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 class numForm(FlaskForm):
-    num_img = IntegerField("Numéro de l'image entre 0 et 9 :", validators=[NumberRange(min=0, max=9)])
+    num_img = IntegerField("Numéro de l'image entre 0 et 99 :", validators=[NumberRange(min=0, max=99)])
 
 
 def comput(i):
@@ -31,6 +31,7 @@ def comput(i):
     print('name img ', name)
     # copie l'image dans le dossier static
     imgR = Image.open(path)
+    imgR= imgR.resize((512,256))
     print('Path enr', f'{static_path}{name}')
     imgR.save(f'{static_path}{name}')
     print('Saved img Original')
@@ -60,19 +61,15 @@ def merge(imgPred, img):
 
 def myapi(data):
     uri = os.getenv('endpoint')
-    print('myapi:1 ,get endpoint OK')
     key = os.getenv('key')
-    print('myapi:2 ,get key OK')
     input_data = serialize_image(data)
-    print('myapi:3 ,input_data OK')
     headers = {'Content-Type': 'application/json'}
     headers['Authorization'] = f'Bearer {key}'
-
     response: Response = requests.post(uri, data=input_data, headers=headers)
-    print('myapi:4 :response OK')
-    print('myapi:5', response.json())
+    print('myapi:1 :response OK')
     img = deserialize_json(response.json())
-    print('myapi:6 img OK')
+    img = img.resize(((512, 256)))
+    print('myapi:2 img OK')
     return img
 
 
