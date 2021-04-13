@@ -17,11 +17,12 @@ class numForm(FlaskForm):
 def comput(i):
     # recuperation de l'image suivant un index depuis le Blob d'Azure
     image_dir = os.getenv('path_img')
+    print('image dir ',image_dir)
     image_mask = ""
     image_list = os.listdir(image_dir)
     i = int(i)
     path = f'{image_dir}/{image_list[i]}'
-    print('Image path',path)
+    print('Image path ',path)
     name = f'{image_list[i]}'
     #copie l'image dans le dossier static
     imgR = Image.open(path)
