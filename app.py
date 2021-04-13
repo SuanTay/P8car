@@ -40,10 +40,10 @@ def comput(i):
     print('name color ', name_c)
     imgC.save(static_path + name_c)
     # merge
-    imgT = merge(static_path + imgC, imgR)
+    imgT = merge(imgC, imgR)
     name_t = f't_{name}'
     print('name total ', name_t)
-    imgT.save(name_t)
+    imgT.save(static_path + name_t)
     print('Image path original', name)
     print('Image path col', name_c)
     print('Image path total', name_t)
@@ -70,10 +70,10 @@ def myapi(data):
 
     response: Response = requests.post(uri, data=input_data, headers=headers)
     print('myapi:4 :response OK')
-    print('myapi:5', response.json)
-    json_file = deserialize_image(response.json)
-    print('myapi:6', json_file[:50])
-    return json_file
+    print('myapi:5', response.json())
+    img = deserialize_json(response.json())
+    print('myapi:6 img OK')
+    return img
 
 
 def serialize_image(image):
@@ -100,6 +100,20 @@ def deserialize_image(data_serialized):
 
     image = Image.fromarray(img)
     return (image)
+
+def deserialize_json(data_serialized):
+    import json
+    from PIL import Image
+    import io
+    memfile = io.BytesIO()
+    memfile.write(json.loads(data_serialized)['data'].encode('latin-1'))
+    memfile.seek(0)
+    img = np.load(memfile)
+    print('deserialize_image shape', img.shape)
+
+    image = Image.fromarray((img * 255).astype(np.uint8))
+    return image
+
 
 
 @app.route('/form', methods=['GET', 'POST'])
